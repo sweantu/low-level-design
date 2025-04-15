@@ -4,7 +4,7 @@ from __future__ import annotations
 from abc import ABC, abstractmethod
 
 
-class Factory:
+class Factory(ABC):
     @abstractmethod
     def create(self) -> Transport:
         pass
@@ -29,7 +29,7 @@ class PlaneFactory(Factory):
         return Plane()
 
 
-class Transport:
+class Transport(ABC):
     @abstractmethod
     def delivery(self) -> str:
         pass
