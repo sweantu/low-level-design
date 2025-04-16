@@ -1,3 +1,5 @@
+# Adapter used to allow incompatible objects to collaborate.
+
 from enum import Enum
 from abc import ABC, abstractmethod
 
