@@ -1,4 +1,4 @@
-# Observer used to allow some objects to notify other objects about changes in their state.
+# Observer pattern using pull model - observers request data from subject when notified
 
 from __future__ import annotations
 from abc import ABC, abstractmethod
@@ -7,41 +7,61 @@ import random
 
 
 class Subject:
-    _data: int = 0
-    _observers: List[Observer] = []
+
+    def __init__(self):
+        self._data: int = 0
+        self._observers: List[Observer] = []
 
     def subscribe(self, observer: Observer):
-        self._observers.append(observer)
-        print("Subscribe successfully")
+        if observer not in self._observers:
+            self._observers.append(observer)
+            print("Subscribe successfully")
+        else:
+            print("Observer already subscribed")
 
     def unsubscribe(self, observer: Observer):
-        self._observers.remove(observer)
-        print("Unsubscribe successfully")
+        if observer in self._observers:
+            self._observers.remove(observer)
+            print("Unsubscribe successfully")
+        else:
+            print("Observer not found")
 
     def notify(self):
+        # Only notify observers without sending data
         for observer in self._observers:
-            observer.receive(self._data)
+            observer.update(self)
         print("Notify successfully")
 
     def random(self):
         self._data = random.randrange(1, 100)
         self.notify()
 
+    # Getter method for observers to pull data when needed
+    def get_data(self) -> int:
+        return self._data
+
 
 class Observer(ABC):
     @abstractmethod
-    def receive(self, data: int):
+    def update(self, subject: Subject):
+        """Update method receives the subject reference, not the data"""
         pass
 
 
 class User1(Observer):
-    def receive(self, data):
-        print(f"User 1 receives {data}")
+
+    def update(self, subject: Subject):
+        # Pull data from subject when notified
+        data = subject.get_data()
+        print(f"User 1 pulls and receives {data}")
 
 
 class User2(Observer):
-    def receive(self, data):
-        print(f"User 2 receives {data}")
+
+    def update(self, subject: Subject):
+        # Pull data from subject when notified
+        data = subject.get_data()
+        print(f"User 2 pulls and receives {data}")
 
 
 if __name__ == "__main__":
