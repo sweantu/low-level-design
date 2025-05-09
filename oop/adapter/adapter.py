@@ -1,7 +1,7 @@
 # Adapter used to allow incompatible objects to collaborate.
 
-from enum import Enum
 from abc import ABC, abstractmethod
+from enum import Enum
 
 
 class Port(Enum):
@@ -31,26 +31,26 @@ class ChargerTypeA(Charger):
             print("Not supported")
 
 
-class PortTypeCToPortTypeAAdapter(Charger):
-    def __init__(self, typeA: ChargerTypeA):
-        self.typeA = typeA
+class Adapter(Charger):
+    def __init__(self, chargerTypeA: ChargerTypeA):
+        self.chargerTypeA = chargerTypeA
 
     def charge(self, port: Port):
         if port == Port.PORT_TYPE_C:
-            print("Adapter converting Type-C port to Type-A port")
+            print("Adapter converting port Type-C to port Type-A")
             port = Port.PORT_TYPE_A
-            self.typeA.charge(port)
+            self.chargerTypeA.charge(port)
         else:
             print("Not supported")
 
 
 if __name__ == "__main__":
-    port = Port.PORT_TYPE_C
-    typeC = ChargerTypeC()
-    typeC.charge(port)
+    portTypeC = Port.PORT_TYPE_C
+    chargerTypeC = ChargerTypeC()
+    chargerTypeC.charge(portTypeC)
 
-    typeA = ChargerTypeA()
-    typeA.charge(port)
+    chargerTypeA = ChargerTypeA()
+    chargerTypeA.charge(portTypeC)
 
-    adapter = PortTypeCToPortTypeAAdapter(typeA)
-    adapter.charge(port)
+    adapter = Adapter(chargerTypeA)
+    adapter.charge(portTypeC)
